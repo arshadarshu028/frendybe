@@ -9,6 +9,8 @@ app.use(cors());
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
+// const authRouter
+
 // database
 const db = require("./app/models");
 // const { json } = require("sequelize/types");
@@ -26,6 +28,14 @@ app.get("/", (req, res) => {
 require("./app/routes/book.routes")(app);
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+
+app.all("*", (req, res, next) => {
+  let origin = req.get("origin");
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
 
 // set port, listen for requests
 const PORT = config.PORT;
